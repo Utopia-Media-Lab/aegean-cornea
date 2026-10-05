@@ -1,7 +1,7 @@
 # AEGC Website Agent Contract
 
 Project: Aegean Cornea & Cataract XVIII — Corfu 2027
-Repo: `gpal1973/aegean-cornea`
+Repo: `Utopia-Media-Lab/aegean-cornea`
 Production branch: `main`
 Live production: `https://aegeancornea.com`
 
