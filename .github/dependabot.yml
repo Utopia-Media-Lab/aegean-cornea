@@ -1,24 +1,30 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: npm
+    directory: /
     schedule:
-      interval: "monthly"
+      interval: monthly
       time: "06:00"
-      timezone: "Europe/Athens"
-    open-pull-requests-limit: 5
+      timezone: Europe/Athens
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: chore
     groups:
       npm-minor-and-patch:
         patterns: ["*"]
         update-types: ["minor", "patch"]
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "monthly"
+      interval: monthly
       time: "06:15"
-      timezone: "Europe/Athens"
-    open-pull-requests-limit: 5
+      timezone: Europe/Athens
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: chore
     groups:
       github-actions:
         patterns: ["*"]
