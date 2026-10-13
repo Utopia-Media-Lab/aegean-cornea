@@ -83,3 +83,11 @@ footer a{color:inherit;text-underline-offset:.16em}
   *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
   [data-reveal]{opacity:1!important;transform:none!important;filter:none!important}
 }
+.legal{max-width:46rem;margin:0 auto;padding:4rem clamp(1.5rem,5vw,3rem) 6rem;color:var(--ink)}
+.legal-back{display:inline-block;margin-bottom:2.5rem;font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--navy)}
+.legal h1{font-size:clamp(2.4rem,6vw,3.8rem);color:var(--navy);max-width:none}
+.legal h2{margin-top:2.6rem;font-size:1.6rem;line-height:1.15;color:var(--navy)}
+.legal p{margin:1rem 0}
+.legal-meta{color:rgba(7,21,54,.64);font-size:.85rem}
+.legal code{font-size:.9em}
+.legal .consent-reset{color:var(--royal)}

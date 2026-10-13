@@ -1,0 +1,82 @@
+---
+const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? 'G-XJR3KBQQQR';
+---
+
+<div class="consent" id="consent" role="dialog" aria-labelledby="consent-title" aria-live="polite" hidden>
+  <p id="consent-title"><strong>Analytics cookies.</strong> We use Google Analytics to understand how the site is used. Nothing is collected unless you allow it. <a href="/privacy">Privacy notice</a></p>
+  <div class="consent-actions">
+    <button type="button" data-consent="denied">Only necessary</button>
+    <button type="button" data-consent="granted">Allow analytics</button>
+  </div>
+</div>
+
+<style is:global>
+  .consent{position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:50;max-width:44rem;margin:0 auto;padding:1rem 1.25rem;display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#06183f;color:#fff;border:1px solid rgba(255,255,255,.24);font-size:.85rem;line-height:1.5}
+  .consent[hidden]{display:none}
+  .consent p{margin:0;flex:1 1 18rem}
+  .consent a{color:inherit;text-underline-offset:.16em}
+  .consent-actions{display:flex;gap:.6rem}
+  .consent button,.consent-reset{font:inherit;cursor:pointer}
+  .consent button{padding:.6rem 1rem;border:1px solid rgba(255,255,255,.76);background:transparent;color:#fff;font-weight:600}
+  .consent button[data-consent="granted"]{background:#fff;color:#071f57}
+  .consent button:focus-visible,.consent-reset:focus-visible{outline:3px solid #f1b52e;outline-offset:3px}
+  .consent-reset{padding:0;border:0;background:none;color:inherit;text-transform:inherit;letter-spacing:inherit;text-decoration:underline;text-underline-offset:.16em}
+</style>
+
+<script is:inline define:vars={{ measurementId }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+  });
+
+  var KEY = 'aegc-consent';
+  var banner = document.getElementById('consent');
+  var loaded = false;
+
+  function read() {
+    try { return localStorage.getItem(KEY); } catch (e) { return null; }
+  }
+  function write(value) {
+    try { localStorage.setItem(KEY, value); } catch (e) {}
+  }
+  function load() {
+    if (loaded) return;
+    loaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + measurementId;
+    document.head.appendChild(s);
+    gtag('js', new Date());
+    gtag('config', measurementId, { allow_google_signals: false, allow_ad_personalization_signals: false });
+  }
+  function apply(value) {
+    if (value === 'granted') {
+      gtag('consent', 'update', { analytics_storage: 'granted' });
+      load();
+    } else {
+      gtag('consent', 'update', { analytics_storage: 'denied' });
+    }
+  }
+
+  var saved = read();
+  if (saved === 'granted' || saved === 'denied') apply(saved);
+  else banner.hidden = false;
+
+  banner.addEventListener('click', function (event) {
+    var value = event.target && event.target.getAttribute && event.target.getAttribute('data-consent');
+    if (!value) return;
+    write(value);
+    banner.hidden = true;
+    apply(value);
+  });
+
+  document.addEventListener('click', function (event) {
+    if (event.target && event.target.closest && event.target.closest('[data-consent-reset]')) {
+      banner.hidden = false;
+    }
+  });
+</script>

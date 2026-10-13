@@ -3,6 +3,7 @@ import '@fontsource-variable/dm-sans/wght.css';
 import '@fontsource/playfair-display/latin-500.css';
 import '@fontsource/playfair-display/latin-600.css';
 import '../styles/global.css';
+import Analytics from '../components/Analytics.astro';
 
 interface Props {
   title: string;
@@ -65,5 +66,6 @@ const ogImageUrl = new URL(ogImage, site).toString();
   </head>
   <body>
     <slot />
+    <Analytics />
   </body>
 </html>
