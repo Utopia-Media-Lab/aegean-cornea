@@ -18,18 +18,17 @@ Do not copy brand, business, approval or platform rules into this file. Retrieve
 - GitHub owns executable website source and optimized runtime assets.
 - `main` is the accepted production branch.
 - The site is static Astro; do not add SSR or server runtime without a concrete requirement and architecture review.
-- Netlify serves production until the Cloudflare cutover.
-- Cloudflare Workers Static Assets (`wrangler.jsonc`, Worker `aegean-cornea`, Workers Builds) is the migration target; branch previews run on `*.workers.dev`. Attaching the custom domain is the cutover and needs separate explicit approval.
-- Keep `public/_headers` and `public/_redirects` in step with `netlify.toml` until Netlify is removed.
-- Wix remains authoritative for DNS; the live web records route `aegeancornea.com` and `www` to Netlify.
-- Netlify and Cloudflare are deployment targets, not sources of truth.
-- Do not change the custom domain, Wix DNS, mail-related DNS records or production publication settings without separate explicit approval.
+- Cloudflare Workers Static Assets (`wrangler.jsonc`, Worker `aegean-cornea`, Workers Builds) serves production; branch previews run on `*.workers.dev`. Netlify is retired.
+- `public/_headers` and `public/_redirects` hold the security headers and redirects.
+- Cloudflare is authoritative for DNS (zone `aegeancornea.com`); Wix stays the registrar until the transfer to Cloudflare Registrar.
+- Cloudflare is a deployment target, not a source of truth.
+- Do not change the custom domain, DNS, mail-related DNS records or production publication settings without separate explicit approval.
 
 ## Workflow
 1. Inspect `main`, open PRs and current deployment state before editing.
 2. Use a short-lived branch for material changes.
 3. Run `npm install`, `npm run dev` and `npm run build` for material code changes.
-4. Review the branch on a deploy preview (Netlify until the cutover, Cloudflare `*.workers.dev` after) before merge.
+4. Review the branch on its Cloudflare `*.workers.dev` preview before merge.
 5. Verify responsive behavior, links, assets, metadata, accessibility basics, 404s and redirects.
 6. Open a PR and require human review before merge.
 7. Merge to `main` only after explicit approval when merge can trigger production deployment.
