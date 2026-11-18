@@ -1,5 +1,7 @@
 ---
-const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? 'G-XJR3KBQQQR';
+// GA4 runs inside Google Tag Manager (GTM-NMGHQ2ZS), which loads only after "Allow analytics" and only on aegeancornea.com.
+const gtmEnv = (import.meta.env.PUBLIC_GTM_ID ?? 'GTM-NMGHQ2ZS').trim().toUpperCase();
+const gtmId = /^GTM-[A-Z0-9]+$/.test(gtmEnv) ? gtmEnv : '';
 ---
 
 <div class="consent" id="consent" role="dialog" aria-labelledby="consent-title" aria-live="polite" hidden>
@@ -23,7 +25,8 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? 'G-XJR3KBQQQR'
   .consent-reset{padding:0;border:0;background:none;color:inherit;text-transform:inherit;letter-spacing:inherit;text-decoration:underline;text-underline-offset:.16em}
 </style>
 
-<script is:inline define:vars={{ measurementId }}>
+<script is:inline define:vars={{ gtmId }}>
+  // Consent Mode v2: everything is denied before any Google tag can load.
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
   gtag('consent', 'default', {
@@ -31,10 +34,14 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? 'G-XJR3KBQQQR'
     ad_user_data: 'denied',
     ad_personalization: 'denied',
     analytics_storage: 'denied',
+    wait_for_update: 500,
   });
+  gtag('set', 'ads_data_redaction', true);
 
   var KEY = 'aegc-consent';
   var banner = document.getElementById('consent');
+  // Only the public domain is measured: localhost and preview URLs never load a tag.
+  var liveHost = /^(www\.)?aegeancornea\.com$/.test(window.location.hostname);
   var loaded = false;
 
   function read() {
@@ -44,14 +51,13 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? 'G-XJR3KBQQQR'
     try { localStorage.setItem(KEY, value); } catch (e) {}
   }
   function load() {
-    if (loaded) return;
+    if (loaded || !liveHost || !gtmId) return;
     loaded = true;
+    dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
     var s = document.createElement('script');
     s.async = true;
-    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + measurementId;
+    s.src = 'https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(gtmId);
     document.head.appendChild(s);
-    gtag('js', new Date());
-    gtag('config', measurementId, { allow_google_signals: false, allow_ad_personalization_signals: false });
   }
   // Withdrawn or refused consent also removes the Google Analytics cookies this site can see.
   function clearAnalyticsCookies() {
@@ -86,8 +92,19 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? 'G-XJR3KBQQQR'
   });
 
   document.addEventListener('click', function (event) {
-    if (event.target && event.target.closest && event.target.closest('[data-consent-reset]')) {
+    var target = event.target && event.target.closest ? event.target : null;
+    if (!target) return;
+    if (target.closest('[data-consent-reset]')) {
       banner.hidden = false;
+      return;
     }
+    // contact_click: only after consent, never with the address itself.
+    var link = target.closest('a[href^="mailto:"], a[href^="tel:"]');
+    if (!link || !loaded) return;
+    dataLayer.push({
+      event: 'contact_click',
+      method: link.getAttribute('href').indexOf('tel:') === 0 ? 'phone' : 'email',
+      location: link.closest('footer') ? 'footer' : link.closest('.contact-grid') ? 'contact' : 'page',
+    });
   });
 </script>
