@@ -9,5 +9,7 @@
     "html_handling": "auto-trailing-slash"
   },
   "workers_dev": true,
-  "preview_urls": true
+  "preview_urls": true,
+  // Branch builds run `wrangler preview` (Workers Previews), which needs this block.
+  "previews": {}
 }
