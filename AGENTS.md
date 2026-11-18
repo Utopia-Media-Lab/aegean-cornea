@@ -18,16 +18,18 @@ Do not copy brand, business, approval or platform rules into this file. Retrieve
 - GitHub owns executable website source and optimized runtime assets.
 - `main` is the accepted production branch.
 - The site is static Astro; do not add SSR or server runtime without a concrete requirement and architecture review.
-- Netlify serves preview and production deployments.
+- Netlify serves production until the Cloudflare cutover.
+- Cloudflare Workers Static Assets (`wrangler.jsonc`, Worker `aegean-cornea`, Workers Builds) is the migration target; branch previews run on `*.workers.dev`. Attaching the custom domain is the cutover and needs separate explicit approval.
+- Keep `public/_headers` and `public/_redirects` in step with `netlify.toml` until Netlify is removed.
 - Wix remains authoritative for DNS; the live web records route `aegeancornea.com` and `www` to Netlify.
-- Netlify is a deployment target, not a second source of truth.
+- Netlify and Cloudflare are deployment targets, not sources of truth.
 - Do not change the custom domain, Wix DNS, mail-related DNS records or production publication settings without separate explicit approval.
 
 ## Workflow
 1. Inspect `main`, open PRs and current deployment state before editing.
 2. Use a short-lived branch for material changes.
 3. Run `npm install`, `npm run dev` and `npm run build` for material code changes.
-4. Review the branch on a Netlify deploy preview before merge.
+4. Review the branch on a deploy preview (Netlify until the cutover, Cloudflare `*.workers.dev` after) before merge.
 5. Verify responsive behavior, links, assets, metadata, accessibility basics, 404s and redirects.
 6. Open a PR and require human review before merge.
 7. Merge to `main` only after explicit approval when merge can trigger production deployment.
