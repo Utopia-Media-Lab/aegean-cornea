@@ -53,12 +53,23 @@ const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? 'G-XJR3KBQQQR'
     gtag('js', new Date());
     gtag('config', measurementId, { allow_google_signals: false, allow_ad_personalization_signals: false });
   }
+  // Withdrawn or refused consent also removes the Google Analytics cookies this site can see.
+  function clearAnalyticsCookies() {
+    var host = window.location.hostname.replace(/^www\./, '');
+    document.cookie.split(';').forEach(function (cookie) {
+      var name = cookie.split('=')[0].trim();
+      if (name !== '_ga' && name.indexOf('_ga_') !== 0) return;
+      document.cookie = name + '=; Max-Age=0; path=/; SameSite=Lax';
+      document.cookie = name + '=; Max-Age=0; path=/; domain=.' + host + '; SameSite=Lax';
+    });
+  }
   function apply(value) {
     if (value === 'granted') {
       gtag('consent', 'update', { analytics_storage: 'granted' });
       load();
     } else {
       gtag('consent', 'update', { analytics_storage: 'denied' });
+      clearAnalyticsCookies();
     }
   }
 
