@@ -8,7 +8,7 @@ Live production: `https://aegeancornea.com`
 ## Canonical routing
 - Area: https://app.notion.com/p/1d20f76b2a33803baa3bd48f5fef4b88
 - Brand Kit: https://app.notion.com/p/3df0f76b2a33812caf07c16006866749
-- UTML Web Systems Delivery: https://app.notion.com/p/3df0f76b2a3381379b40cd74b2552086
+- UTML Web delivery rules: https://github.com/Utopia-Media-Lab/utml-system/blob/main/.context/doctypes/web.md
 - Source assets: https://drive.google.com/open?id=1cjAyVGjFnVrzptQc0WTQ2kjT1d5YRg1F
 - Corfu 2027 project files: https://drive.google.com/open?id=1bDu--YXcLzBABMVGwJu43DKAOacNEdYi
 
